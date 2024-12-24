@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,13 +19,6 @@ spec:
           image: prom/prometheus:v2.34.0
           ports:
             - containerPort: 9090
-          volumeMounts:
-            - mountPath: /etc/prometheus
-              name: prometheus-config
-      volumes:
-        - name: prometheus-config
-          configMap:
-            name: prometheus-config
 ---
 apiVersion: v1
 kind: Service
@@ -39,8 +33,3 @@ spec:
   selector:
     app: prometheus
   type: ClusterIP
----
-- job_name: 'flask-app'
-  scrape_interval: 15s
-  static_configs:
-    - targets: ['flask-app.default.svc.cluster.local:5000']
