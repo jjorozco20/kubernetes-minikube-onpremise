@@ -5,8 +5,11 @@ In this repo, you will create 2 pods in the default namespace to deploy a Flask 
 ## Requirements 
 
 Minikube installed (it will be on-premises, that's why). You can install it using `choco install minikube`
+
 kubectl installed. Run kubectl --version, Minikube installs it by default, but ensure you got it.
+
 Docker Desktop (or engine if you are linux-based) installed. Go to [Docker webpage](https://docs.docker.com/get-started/get-docker/).
+
 Install Istio in demo mode. You can go [here](https://istio.io/latest/docs/setup/install/) to search how to install it. I am on Windows, this helped me doing it on Powershell:
 
 ```
