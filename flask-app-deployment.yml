@@ -1,0 +1,48 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-app
+  labels:
+    app: flask-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-app
+  template:
+    metadata:
+      labels:
+        app: flask-app
+    spec:
+      containers:
+      - name: flask-app
+        image: jjorozco20/flask-mysql-app:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: MYSQL_HOST
+          value: {{ vars.MYSQL_HOST }}  # Kubernetes internal service name for MySQL
+        - name: MYSQL_PORT
+          value: {{ vars.MYSQL_PORT }}
+        - name: MYSQL_USER
+          value: {{ vars.MYSQL_USER }}
+        - name: MYSQL_PASSWORD
+          value: {{ secrets.MYSQL_PASSWORD }}
+        - name: MYSQL_DB
+          value: {{ vars.MYSQL_DB }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-app
+spec:
+  ports:
+    - port: 5000  # Flask app runs on port 5000 inside the cluster
+      protocol: TCP
+      targetPort: 5000
+      nodePort: 30007  # You can choose a specific NodePort here
+  selector:
+    app: flask-app
+  type: NodePort
