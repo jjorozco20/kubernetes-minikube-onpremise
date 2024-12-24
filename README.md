@@ -1,14 +1,15 @@
 # kubernetes-minikube-onpremise
 
-In this repo, you will create 2 pods in the default namespace to deploy a Flask application and a MySQL server containers. Also we are going to use istio-system and kubernetes-dashboard namespaces for tooling. 
+In this repo, you will create 2 pods in the `default` namespace to deploy a Flask application and a MySQL server containers. Also we are going to use `istio-system` and `kubernetes-dashboard` namespaces for tooling. 
+
+---
 
 ## Requirements 
 
-Minikube installed (it will be on-premises, that's why). You can install it using `choco install minikube`
-
-kubectl installed. Run kubectl --version, Minikube installs it by default, but ensure you got it.
-Docker Desktop running. Go to [Docker webpage](https://docs.docker.com/get-started/get-docker/).
-Install Istio in demo mode. You can go [here](https://istio.io/latest/docs/setup/install/) to search how to install it. I am on Windows, this helped me doing it on Powershell:
+* Minikube installed (it will be on-premises, that's why). You can install it using `choco install minikube`
+* kubectl installed. Run kubectl --version, Minikube installs it by default, but ensure you got it.
+* Docker Desktop running. Go to [Docker webpage](https://docs.docker.com/get-started/get-docker/).
+* Install Istio in demo mode. You can go [here](https://istio.io/latest/docs/setup/install/) to search how to install it. I am on Windows, this helped me doing it on Powershell:
 
 ```
 $IstioVersion = "1.19.0"  # Replace with the desired Istio version
@@ -33,9 +34,9 @@ kubectl label namespace default istio-injection=enabled
 For this you will need to edit the variable for some files in order to point to your volume folder. Change them according to your needs.
 
 Check `mysql-deployment.yml`:
-Line 12: `path: {{ vars.LOCAL_PATH }}  # Adjust for your Windows/Linux environment`
-Line 49: `value: {{ secrets.MYSQL_PASSWORD }}  # MySQL root password`
-Line 51: `value: {{ vars.MYSQL_DB }}  # Database name`
+* Line 12: `path: {{ vars.LOCAL_PATH }}  # Adjust for your Windows/Linux environment`
+* Line 49: `value: {{ secrets.MYSQL_PASSWORD }}  # MySQL root password`
+* Line 51: `value: {{ vars.MYSQL_DB }}  # Database name`
 
 Check `flask-app-deployment.yml`:
 
@@ -45,7 +46,7 @@ Check `flask-app-deployment.yml`:
 * Line 31: `{{ secrets.MYSQL_PASSWORD }}`
 * Line 33: `{{ vars.MYSQL_DB }}`
 
-Check `flask-app-deployment.yml`:
+Check `grafana-deployment.yml`:
 * Line 23: `value: {{ secrets.GRAFANA_PASSWORD }}  # Set admin password for Grafana`
 
 ---
@@ -97,13 +98,22 @@ kubectl -n default create token dashboard-admin
 # For this PoC was used 2 manual queries once thet you logged into Grafana, which follows PromQL.
 # You can add a ClusterMap to do so, but for this time, we are going to add them using the cluster's info.
 
+# If you want to list your cluster's info right at your CLI, use this:
+
+kubectl get deployments
+kubectl get services
+kubectl get pods
+
+# If you want to know the minikube IP:
+minikube ip
+
+# If you want to delete the whole thing:
+kubectl delete -f flask-app-deployment.yml
+kubectl delete -f mysql-deployment.yml
+kubectl delete -f istio-mesh.yml
+kubectl delete -f prometheus-deployment.yml
+kubectl delete -f grafana-deployment.yml
+
+# Follow for more! :D
 ```
-
-
-
-
-
-
-
-
-
+And there you gooooooo!

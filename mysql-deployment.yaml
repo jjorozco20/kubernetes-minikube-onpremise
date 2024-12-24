@@ -44,6 +44,13 @@ spec:
         ports:
         - containerPort: 3306
           name: db-container
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
         env:
         - name: MYSQL_ROOT_PASSWORD
           value: {{ secrets.MYSQL_PASSWORD }}  # MySQL root password
